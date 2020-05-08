@@ -8,7 +8,6 @@ from geometry_msgs.msg import Pose, PoseArray
 from tf import TransformListener
 import tf
 import math
-import rospkg
 import csv
 
 # ewww
