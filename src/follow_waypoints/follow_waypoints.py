@@ -33,19 +33,18 @@ class FollowPath(State):
 
     def execute(self, userdata):
         global waypoints
-        # Execute waypoints each in sequence
         for waypoint in waypoints:
-            # Break if preempted
-            if waypoints == []:
+            if not waypoints:
                 rospy.loginfo('The waypoint queue has been reset.')
                 break
+
             # Otherwise publish next waypoint as goal
             goal = MoveBaseGoal()
             goal.target_pose.header.frame_id = self.frame_id
-            goal.target_pose.pose.position = waypoint.pose.pose.position
-            goal.target_pose.pose.orientation = waypoint.pose.pose.orientation
+            goal.target_pose.pose.position = waypoint.position
+            goal.target_pose.pose.orientation = waypoint.orientation
             rospy.loginfo('Executing move_base goal to position (x,y): %s, %s' %
-                    (waypoint.pose.pose.position.x, waypoint.pose.pose.position.y))
+                    (waypoint.position.x, waypoint.position.y))
             rospy.loginfo("To cancel the goal: 'rostopic pub -1 /move_base/cancel actionlib_msgs/GoalID -- {}'")
             self.client.send_goal(goal)
             if not self.distance_tolerance > 0.0:
@@ -59,7 +58,7 @@ class FollowPath(State):
                     now = rospy.Time.now()
                     self.listener.waitForTransform(self.odom_frame_id, self.base_frame_id, now, rospy.Duration(4.0))
                     trans,rot = self.listener.lookupTransform(self.odom_frame_id,self.base_frame_id, now)
-                    distance = math.sqrt(pow(waypoint.pose.pose.position.x-trans[0],2)+pow(waypoint.pose.pose.position.y-trans[1],2))
+                    distance = math.sqrt(pow(waypoint.position.x-trans[0], 2) + pow(waypoint.position.y-trans[1], 2))
         return 'success'
 
 
