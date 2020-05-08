@@ -47,7 +47,7 @@ class FollowPath(State):
                     (waypoint.position.x, waypoint.position.y))
             rospy.loginfo("To cancel the goal: 'rostopic pub -1 /move_base/cancel actionlib_msgs/GoalID -- {}'")
             self.client.send_goal(goal)
-            if not self.distance_tolerance > 0.0:
+            if self.distance_tolerance == 0.0:
                 self.client.wait_for_result()
                 rospy.loginfo("Waiting for %f sec..." % self.duration)
                 time.sleep(self.duration)
