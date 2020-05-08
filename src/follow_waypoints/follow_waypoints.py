@@ -105,3 +105,7 @@ def main():
                            transitions={'success': 'GET_PATH'})
 
     outcome = sm.execute()
+
+
+if __name__ == '__main__':
+    main()
