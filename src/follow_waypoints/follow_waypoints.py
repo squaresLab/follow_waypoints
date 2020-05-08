@@ -14,7 +14,7 @@ import rospkg
 import csv
 
 
-#Path for saving and retreiving the pose.csv file 
+#Path for saving and retreiving the pose.csv file
 output_file_path = rospkg.RosPack().get_path('follow_waypoints')+"/saved_path/pose.csv"
 waypoints = []
 
@@ -114,13 +114,13 @@ class GetPath(State):
             with open(output_file_path, 'w') as file:
                 for current_pose in waypoints:
                     file.write(str(current_pose.pose.pose.position.x) + ',' + str(current_pose.pose.pose.position.y) + ',' + str(current_pose.pose.pose.position.z) + ',' + str(current_pose.pose.pose.orientation.x) + ',' + str(current_pose.pose.pose.orientation.y) + ',' + str(current_pose.pose.pose.orientation.z) + ',' + str(current_pose.pose.pose.orientation.w)+ '\n')
-	        rospy.loginfo('poses written to '+ output_file_path)	
+	        rospy.loginfo('poses written to '+ output_file_path)
         ready_thread = threading.Thread(target=wait_for_path_ready)
         ready_thread.start()
 
         self.start_journey_bool = False
 
-        # Start thread to listen start_jorney 
+        # Start thread to listen start_journey
         # for loading the saved poses from follow_waypoints/saved_path/poses.csv
         def wait_for_start_journey():
             """thread worker function"""
@@ -130,7 +130,7 @@ class GetPath(State):
                 reader = csv.reader(file, delimiter = ',')
                 for row in reader:
                     print row
-                    current_pose = PoseWithCovarianceStamped() 
+                    current_pose = PoseWithCovarianceStamped()
                     current_pose.pose.pose.position.x     =    float(row[0])
                     current_pose.pose.pose.position.y     =    float(row[1])
                     current_pose.pose.pose.position.z     =    float(row[2])
@@ -141,8 +141,7 @@ class GetPath(State):
                     waypoints.append(current_pose)
                     self.poseArray_publisher.publish(convert_PoseWithCovArray_to_PoseArray(waypoints))
             self.start_journey_bool = True
-            
-            
+
         start_journey_thread = threading.Thread(target=wait_for_start_journey)
         start_journey_thread.start()
 
