@@ -75,6 +75,8 @@ class GetPath(State):
         global waypoints
         pose_array = rospy.wait_for_message('positions', PoseArray)
         waypoints = [pose for pose in pose_array.poses]
+        pub = rospy.Publisher('waypoint_success', std_msgs.msg.String)
+        pub.publish("success")
         return 'success'
 
 
@@ -86,6 +88,7 @@ class PathComplete(State):
         rospy.loginfo('###############################')
         rospy.loginfo('##### REACHED FINISH GATE #####')
         rospy.loginfo('###############################')
+        exit()
         return 'success'
 
 
