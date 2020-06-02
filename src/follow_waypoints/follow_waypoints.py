@@ -6,6 +6,7 @@ import actionlib
 from smach import State, StateMachine
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from geometry_msgs.msg import Pose, PoseArray
+from std_msgs.msg import String
 from tf import TransformListener
 import tf
 import math
@@ -75,7 +76,7 @@ class GetPath(State):
         global waypoints
         pose_array = rospy.wait_for_message('positions', PoseArray)
         waypoints = [pose for pose in pose_array.poses]
-        pub = rospy.Publisher('waypoint_success', std_msgs.msg.String)
+        pub = rospy.Publisher('waypoint_success', String)
         pub.publish("success")
         return 'success'
 
