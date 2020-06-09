@@ -76,7 +76,7 @@ class GetPath(State):
         global waypoints
         pose_array = rospy.wait_for_message('positions', PoseArray)
         waypoints = [pose for pose in pose_array.poses]
-        pub = rospy.Publisher('waypoint_success', String)
+        pub = rospy.Publisher('waypoint_success', String, queue_size=len(waypoints)*2)
         pub.publish("success")
         return 'success'
 
